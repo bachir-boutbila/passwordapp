@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:passwordapp/models/password_data.dart';
+import 'package:hive/hive.dart';
+import 'dart:math';
+
+import 'package:passwordapp/widgets/text_field.dart';
+
+List<String> charachtersList = [
+  // lowercase
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+  'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+  // uppercase
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  // digits
+  '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  // symbols
+  '!', '@', '#', '\$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=',
+];
+String generatepassword() {
+  final Random r = Random.secure();
+  String pwd = '';
+  for (int i = 0; i < 20; i++) {
+    pwd += charachtersList[r.nextInt(charachtersList.length)];
+  }
+  return pwd;
+}
+
+class AcountManagement extends StatefulWidget {
+  final AcountManagementMode mode;
+  const AcountManagement({required this.mode, super.key});
+  static const route = 'add_acount';
+
+  @override
+  State<AcountManagement> createState() => _AcountManagementState();
+}
+
+class _AcountManagementState extends State<AcountManagement> {
+  final acontController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final _mybox = Hive.box<PasswordData>("Mybox");
+  final add = AcountManagementMode.add;
+  final edit = AcountManagementMode.edit;
+
+  @override
+  Widget build(BuildContext context) {
+    final mode =
+        ModalRoute.of(context)!.settings.arguments as AcountManagementMode;
+    return Scaffold(
+      backgroundColor: Colors.black54,
+      appBar: AppBar(
+        backgroundColor: Colors.black12,
+        centerTitle: true,
+        title: mode == add
+            ? Text(
+                'Add Acount',
+                style: GoogleFonts.poppins(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              )
+            : mode == edit
+            ? Text(
+                'Edit Acount',
+                style: GoogleFonts.poppins(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              )
+            : SizedBox.shrink(),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  'Add Acount',
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              TEXTFIELD('Platform', 'Platform', acontController),
+              SizedBox(height: 20),
+              TEXTFIELD('Email', 'Email', emailController),
+              SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TEXTFIELD(
+                      'Password',
+                      'Password',
+                      passwordController,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      final pwd = generatepassword();
+                      passwordController.text = pwd;
+                    },
+                    icon: Icon(Icons.password, color: Colors.white),
+                  ),
+                ],
+              ),
+              SizedBox(height: 190),
+              MaterialButton(
+                onPressed: () {
+                  _mybox.add(
+                    PasswordData(
+                      acontController.text,
+                      emailController.text,
+                      // widget.pwd,
+                      passwordController.text,
+                    ),
+                  );
+                  Navigator.pop(context, true);
+                },
+                child: Container(
+                  height: 60,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.black54,
+                    border: Border.all(color: Colors.grey, width: 2),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Save Acount',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
