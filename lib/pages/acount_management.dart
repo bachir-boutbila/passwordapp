@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passwordapp/models/password_data.dart';
 import 'package:hive/hive.dart';
+import 'package:passwordapp/pages/acountspage.dart';
 import 'dart:math';
 
 import 'package:passwordapp/widgets/text_field.dart';
@@ -32,18 +33,21 @@ class AcountManagement extends StatefulWidget {
   final String? platform;
   final String? email;
   final String? password;
+  final dynamic hiveKey;
 
   const AcountManagement.add({super.key})
     : mode = AcountManagementMode.add,
       platform = null,
       email = null,
-      password = null;
+      password = null,
+      hiveKey = null;
 
   const AcountManagement.edit({
     super.key,
     required this.platform,
     required this.email,
     required this.password,
+    required this.hiveKey,
   }) : mode = AcountManagementMode.edit;
 
   static const route = 'add_acount';
@@ -130,17 +134,24 @@ class _AcountManagementState extends State<AcountManagement> {
               ),
               SizedBox(height: 190),
               MaterialButton(
-                onPressed: () {
-                  isAdd
-                      ? _mybox.add(
-                          PasswordData(
-                            acontController.text,
-                            emailController.text,
-                            // widget.pwd,
-                            passwordController.text,
-                          ),
-                        )
-                      : null;
+                onPressed: () async {
+                  if (isAdd) {
+                    await _mybox.add(
+                      PasswordData(
+                        acontController.text,
+                        emailController.text,
+                        passwordController.text,
+                      ),
+                    );
+                  } else {
+                    final account = _mybox.get(widget.hiveKey);
+                    if (account != null) {
+                      account.platform = acontController.text;
+                      account.email = emailController.text;
+                      account.password = passwordController.text;
+                      await _mybox.put(widget.hiveKey, account);
+                    }
+                  }
                   Navigator.pop(context, true);
                 },
                 child: Container(

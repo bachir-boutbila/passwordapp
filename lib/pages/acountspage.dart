@@ -7,7 +7,15 @@ import '../widgets/passwordcard.dart';
 import 'package:hive/hive.dart';
 
 class Acountspage extends StatefulWidget {
-  const Acountspage({super.key});
+  final String? platform;
+  final String? email;
+  final String? password;
+  const Acountspage({
+    required this.platform,
+    required this.email,
+    required this.password,
+    super.key,
+  });
   static const route = '/';
 
   @override
@@ -49,7 +57,12 @@ class _AcountspageState extends State<Acountspage> {
                       passwordDataList = _mybox.values.toList();
                     });
                   },
-                  onChange: () {},
+                  hiveKey: _mybox.keyAt(index),
+                  onChange: () {
+                    setState(() {
+                      passwordDataList = _mybox.values.toList();
+                    });
+                  },
                 );
               },
             ),

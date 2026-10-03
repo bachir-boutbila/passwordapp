@@ -19,7 +19,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Password Generator',
-      routes: {'/': (context) => const Acountspage()},
+      routes: {
+        '/': (context) =>
+            const Acountspage(platform: null, email: null, password: null),
+      },
     );
   }
 }
