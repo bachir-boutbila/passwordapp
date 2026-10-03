@@ -16,8 +16,6 @@ class PasswordData {
 final _mybox = Hive.box<PasswordData>("Mybox");
 List<PasswordData> passwordDataList = _mybox.values.toList();
 
-// fixe the required problem
-// pass the add enum
-// make add enum if cases
-
 enum AcountManagementMode { add, edit }
+
+// make the functionality of the edit mode

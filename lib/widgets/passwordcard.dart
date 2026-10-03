@@ -66,6 +66,7 @@ class _PasswordcardState extends State<Passwordcard> {
                         context: context,
                         builder: (context) => const DeleteCard(),
                       );
+                      if (!mounted) return;
                       if (shouldDelete == true) {
                         widget.onDelete();
                       }
@@ -127,11 +128,13 @@ class _PasswordcardState extends State<Passwordcard> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      final edited = await Navigator.pushNamed(
+                      final edited = await Navigator.push<bool>(
                         context,
-                        AcountManagement.route,
-                        arguments: AcountManagementMode.edit,
+                        MaterialPageRoute(
+                          builder: (context) => AcountManagement.edit(),
+                        ),
                       );
+                      if (!mounted) return;
                       if (edited == true) {
                         ///
                       }

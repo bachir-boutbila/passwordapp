@@ -29,7 +29,9 @@ String generatepassword() {
 
 class AcountManagement extends StatefulWidget {
   final AcountManagementMode mode;
-  const AcountManagement({required this.mode, super.key});
+  const AcountManagement.add({super.key}) : mode = AcountManagementMode.add;
+  const AcountManagement.edit({super.key}) : mode = AcountManagementMode.edit;
+
   static const route = 'add_acount';
 
   @override
@@ -41,37 +43,23 @@ class _AcountManagementState extends State<AcountManagement> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _mybox = Hive.box<PasswordData>("Mybox");
-  final add = AcountManagementMode.add;
-  final edit = AcountManagementMode.edit;
 
   @override
   Widget build(BuildContext context) {
-    final mode =
-        ModalRoute.of(context)!.settings.arguments as AcountManagementMode;
+    final isAdd = widget.mode == AcountManagementMode.add;
     return Scaffold(
       backgroundColor: Colors.black54,
       appBar: AppBar(
         backgroundColor: Colors.black12,
         centerTitle: true,
-        title: mode == add
-            ? Text(
-                'Add Acount',
-                style: GoogleFonts.poppins(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              )
-            : mode == edit
-            ? Text(
-                'Edit Acount',
-                style: GoogleFonts.poppins(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              )
-            : SizedBox.shrink(),
+        title: Text(
+          isAdd ? 'Add Acount' : 'Edit Acount',
+          style: GoogleFonts.poppins(
+            fontSize: 30,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
@@ -81,25 +69,14 @@ class _AcountManagementState extends State<AcountManagement> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: mode == add
-                    ? Text(
-                        'Add Acount',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      )
-                    : mode == edit
-                    ? Text(
-                        'Edit Acount',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      )
-                    : SizedBox.shrink(),
+                child: Text(
+                  isAdd ? 'Add Acount' : 'Edit Acount',
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               TEXTFIELD('Platform', 'Platform', acontController),
@@ -128,7 +105,7 @@ class _AcountManagementState extends State<AcountManagement> {
               SizedBox(height: 190),
               MaterialButton(
                 onPressed: () {
-                  mode == add
+                  isAdd
                       ? _mybox.add(
                           PasswordData(
                             acontController.text,
@@ -137,8 +114,6 @@ class _AcountManagementState extends State<AcountManagement> {
                             passwordController.text,
                           ),
                         )
-                      : mode == edit
-                      ? null
                       : null;
                   Navigator.pop(context, true);
                 },
@@ -151,25 +126,14 @@ class _AcountManagementState extends State<AcountManagement> {
                     border: Border.all(color: Colors.grey, width: 2),
                   ),
                   child: Center(
-                    child: mode == add
-                        ? Text(
-                            'Save Acount',
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          )
-                        : mode == edit
-                        ? Text(
-                            'Save Edit',
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          )
-                        : SizedBox.shrink(),
+                    child: Text(
+                      isAdd ? 'Save Acount' : 'Save Edit',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),

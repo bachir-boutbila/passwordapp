@@ -58,11 +58,13 @@ class _AcountspageState extends State<Acountspage> {
               padding: const EdgeInsets.all(25.0),
               child: FloatingActionButton(
                 onPressed: () async {
-                  final added = await Navigator.pushNamed(
+                  final added = await Navigator.push<bool>(
                     context,
-                    AcountManagement.route,
-                    arguments: AcountManagementMode.add,
+                    MaterialPageRoute(
+                      builder: (context) => AcountManagement.add(),
+                    ),
                   );
+                  if (!mounted) return;
                   if (added == true) {
                     setState(() {
                       passwordDataList = _mybox.values.toList();
