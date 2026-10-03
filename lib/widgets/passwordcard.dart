@@ -13,11 +13,13 @@ class Passwordcard extends StatefulWidget {
   final String email;
   final String password;
   final VoidCallback onDelete;
+  final VoidCallback onChange;
   const Passwordcard(
     this.platform,
     this.email,
     this.password, {
     required this.onDelete,
+    required this.onChange,
     super.key,
   });
 
@@ -131,12 +133,16 @@ class _PasswordcardState extends State<Passwordcard> {
                       final edited = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AcountManagement.edit(),
+                          builder: (context) => AcountManagement.edit(
+                            platform: widget.platform,
+                            email: widget.email,
+                            password: widget.password,
+                          ),
                         ),
                       );
                       if (!mounted) return;
                       if (edited == true) {
-                        ///
+                        widget.onChange();
                       }
                     },
                     icon: Icon(Icons.edit, color: Colors.white),

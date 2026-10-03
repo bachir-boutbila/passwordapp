@@ -4,11 +4,11 @@ part 'password_data.g.dart';
 @HiveType(typeId: 0)
 class PasswordData {
   @HiveField(0)
-  final String platform;
+  String platform;
   @HiveField(1)
-  final String email;
+  String email;
   @HiveField(2)
-  final String password;
+  String password;
 
   PasswordData(this.platform, this.email, this.password);
 }

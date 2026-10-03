@@ -29,8 +29,22 @@ String generatepassword() {
 
 class AcountManagement extends StatefulWidget {
   final AcountManagementMode mode;
-  const AcountManagement.add({super.key}) : mode = AcountManagementMode.add;
-  const AcountManagement.edit({super.key}) : mode = AcountManagementMode.edit;
+  final String? platform;
+  final String? email;
+  final String? password;
+
+  const AcountManagement.add({super.key})
+    : mode = AcountManagementMode.add,
+      platform = null,
+      email = null,
+      password = null;
+
+  const AcountManagement.edit({
+    super.key,
+    required this.platform,
+    required this.email,
+    required this.password,
+  }) : mode = AcountManagementMode.edit;
 
   static const route = 'add_acount';
 
@@ -43,6 +57,18 @@ class _AcountManagementState extends State<AcountManagement> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _mybox = Hive.box<PasswordData>("Mybox");
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.mode == AcountManagementMode.edit) {
+      // put your existing values here
+      acontController.text = '${widget.platform}';
+      emailController.text = '${widget.email}';
+      passwordController.text = '${widget.password}';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,5 +168,13 @@ class _AcountManagementState extends State<AcountManagement> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    acontController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
