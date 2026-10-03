@@ -66,11 +66,8 @@ class _PasswordcardState extends State<Passwordcard> {
                         context: context,
                         builder: (context) => const DeleteCard(),
                       );
-
                       if (shouldDelete == true) {
                         widget.onDelete();
-
-                        setState(() {});
                       }
                     },
                     icon: Icon(

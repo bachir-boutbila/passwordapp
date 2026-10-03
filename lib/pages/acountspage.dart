@@ -46,6 +46,7 @@ class _AcountspageState extends State<Acountspage> {
                   onDelete: () {
                     setState(() {
                       _mybox.delete(_mybox.keyAt(index));
+                      passwordDataList = _mybox.values.toList();
                     });
                   },
                 );
@@ -64,8 +65,7 @@ class _AcountspageState extends State<Acountspage> {
                   );
                   if (added == true) {
                     setState(() {
-                      passwordDataList = passwordDataList = _mybox.values
-                          .toList();
+                      passwordDataList = _mybox.values.toList();
                     });
                   }
                 },
